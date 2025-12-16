@@ -1,35 +1,75 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useEffect } from "react";
+import "./App.css";
+import { Application, Graphics } from "pixi.js";
+import { drawHexagon } from "./lib/draw";
+import { standardMap } from "./lib/models/HexMap";
+import { Hex } from "./lib/models";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const hexColor = (tile: string) => {
+    let color = 0x000;
+    switch (tile) {
+      case "brick":
+        color = 0xc04657;
+        break;
+      case "wheat":
+        color = 0xf5deb3;
+        break;
+      case "wood":
+        color = 0x8b5a2b;
+        break;
+      case "ore":
+        color = 0x777777;
+        break;
+      case "sheep":
+        color = 0xcccccc;
+        break;
+      case "desert":
+        color = 0xffa54f;
+        break;
+    }
+    return color;
+  };
 
+  const map = standardMap();
+  map.generate();
+
+  useEffect(() => {
+    (async () => {
+      const app = new Application();
+      const renderer = document.getElementById("renderer");
+      await app?.init({ background: "0xffffff", resizeTo: window });
+      renderer?.appendChild(app?.canvas as HTMLCanvasElement);
+      const hexagons = new Graphics();
+      app.stage.addChild(hexagons);
+      const center: [number, number] = [
+        app.canvas.width / 2,
+        app.canvas.height / 2,
+      ];
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      for (const [_, hex] of map.hexMap.hexes) {
+        const loc = Hex.resizePixelCoordinates(hex.location, 110, 1);
+        drawHexagon(
+          hexagons,
+          center.map((val, i) => loc[i] + val) as [number, number],
+          100,
+          hexColor(hex.data.tile)
+        );
+      }
+      drawHexagon(
+        hexagons,
+        center,
+        100,
+        hexColor(map.hexMap.rootHex.data.tile)
+      );
+    })();
+  });
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <div id="renderer"></div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
