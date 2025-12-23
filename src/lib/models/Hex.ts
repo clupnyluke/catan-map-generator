@@ -92,7 +92,7 @@ export class Hex<H, B, V> {
     return [q, r];
   }
 
-  static AxialLocationtoPixelCoordinates(
+  static axialLocationtoPixelCoordinates(
     location: [number, number],
     size = 1
   ): [number, number] {

@@ -50,7 +50,7 @@ function App() {
       ];
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       for (const [_, hex] of map.hexMap.hexes) {
-        const loc = Hex.AxialLocationtoPixelCoordinates(hex.location, 95);
+        const loc = Hex.axialLocationtoPixelCoordinates(hex.location, 95);
         drawHexagon(
           hexagons,
           center.map((val, i) => loc[i] + val) as [number, number],
