@@ -35,9 +35,10 @@ function App() {
   const map = standardMap();
   map.generate();
 
+  const app = new Application();
+
   useEffect(() => {
     (async () => {
-      const app = new Application();
       const renderer = document.getElementById("renderer");
       await app?.init({ background: "0xffffff", resizeTo: window });
       renderer?.appendChild(app?.canvas as HTMLCanvasElement);
@@ -49,7 +50,7 @@ function App() {
       ];
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       for (const [_, hex] of map.hexMap.hexes) {
-        const loc = Hex.resizePixelCoordinates(hex.location, 110, 1);
+        const loc = Hex.AxialLocationtoPixelCoordinates(hex.location, 95);
         drawHexagon(
           hexagons,
           center.map((val, i) => loc[i] + val) as [number, number],

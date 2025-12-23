@@ -13,10 +13,14 @@ export class VertexData implements IVertexData {
 }
 
 export class Vertex<H, B, V> extends Printable {
-  location: [number, number];
+  location: [number, number, number];
   data: V;
   hexMap: HexMap<H, B, V>;
-  constructor(_location: [number, number], _data: V, _hexMap: HexMap<H, B, V>) {
+  constructor(
+    _location: [number, number, number],
+    _data: V,
+    _hexMap: HexMap<H, B, V>
+  ) {
     super({ data: _data, type: "Vertex", location: _location });
     this.location = _location;
     this.data = _data;
@@ -24,7 +28,7 @@ export class Vertex<H, B, V> extends Printable {
   }
 
   static getOrCreate<H, B, V>(
-    location: [number, number],
+    location: [number, number, number],
     hexMap: HexMap<H, B, V>
   ) {
     let vertex = hexMap.vertices.get(location.join());

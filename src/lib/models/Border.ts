@@ -16,14 +16,14 @@ export class BorderData implements IBorderData {
 }
 
 export class Border<H, B, V> extends Printable {
-  location: [number, number];
+  location: [number, number, number];
   distanceFromCenter = SQRT3 / 2;
   data: B;
   hexMap: HexMap<H, B, V>;
   CCWVertex: Vertex<H, B, V> | undefined;
   CWVertex: Vertex<H, B, V> | undefined;
   constructor(
-    _location: [number, number],
+    _location: [number, number, number],
     _orientation: number,
     _data: B,
     _hexMap: HexMap<H, B, V>
@@ -37,22 +37,22 @@ export class Border<H, B, V> extends Printable {
     this.data = _data;
     this.hexMap = _hexMap;
 
-    this.CCWVertex = Vertex.getOrCreate(
-      this.location.map(
-        (val, i) => val + hexVertexLocations[_orientation % 5][i]
-      ) as [number, number],
-      this.hexMap
-    );
     this.CWVertex = Vertex.getOrCreate(
       this.location.map(
+        (val, i) => val + hexVertexLocations[_orientation % 5][i]
+      ) as [number, number, number],
+      this.hexMap
+    );
+    this.CCWVertex = Vertex.getOrCreate(
+      this.location.map(
         (val, i) => val + hexVertexLocations[(_orientation + 1) % 5][i]
-      ) as [number, number],
+      ) as [number, number, number],
       this.hexMap
     );
   }
 
   static getOrCreate<H, B, V>(
-    location: [number, number],
+    location: [number, number, number],
     hexMap: HexMap<H, B, V>,
     orientation: number
   ) {
